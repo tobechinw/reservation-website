@@ -5,7 +5,8 @@ const bodyParser = require('body-parser')
 
 
 const mc = require('mongodb').MongoClient
-const uri = "mongodb+srv://tobechinwachukwu:yAyB0vU5TYOFhrHa@cluster0.sbwko.mongodb.net/?retryWrites=true&w=majority";
+
+const { MONGODB } = require('./config.js')
 
 
 app.use(express.static('public'));
@@ -24,7 +25,7 @@ app.get('/', (request, response)=>{
 
 app.get('/all-rooms', async (request, response)=>{
     try{
-        const client = await mc.connect(uri)
+        const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         const rooms = await db.collection('rooms').find().toArray()
 
@@ -40,7 +41,7 @@ app.get('/all-rooms', async (request, response)=>{
 
 app.get('/available-rooms', async (request, response)=>{
     try{
-        const client = await mc.connect(uri)
+        const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         const rooms = await db.collection('rooms').find({isOccupied: false}).toArray()
         console.log(rooms)
@@ -63,7 +64,7 @@ app.post('/add-room', async (request, response)=>{
     let name = request.body.name
     let message = request.body.message
     try {
-        const client = await mc.connect(uri)
+        const client = await mc.connect(MONGODB)
         console.log('successful connection')
         let db = client.db('reservation')
         const rooms = await db.collection('rooms').find().toArray()
@@ -83,7 +84,7 @@ app.get('/rooms/:id', async (request, response)=>{
     console.log(request.params.id)
     try{
         let roomNumber = request.params.id
-        const client = await mc.connect(uri)
+        const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         const room = await db.collection('rooms').findOne({roomNumber: roomNumber})
         console.log(room)
@@ -105,7 +106,7 @@ app.post('/check-in', async (request, response)=>{
     let category = request.body.category
     let department = request.body.category
     try{
-        const client = await mc.connect(uri)
+        const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         const rooms = await db.collection('rooms').find({isOccupied: false}).toArray()
         if(rooms.length > 0){
@@ -130,7 +131,7 @@ app.post('/check-out', async (request, response)=>{
     let occupant = request.body.name
     console.log(occupant)
     try{
-        const client = await mc.connect(uri)
+        const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         await db.collection('rooms').updateOne({occupant: occupant}, {$set: {occupant: '', isOccupied: false, category: '', department: ''}})
         response.redirect('/')
