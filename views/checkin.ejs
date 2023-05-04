@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/check-in" method="POST">
+        <label for="name">Name of Lodger:</label>
+        <input type="text" id="name" name="name" required>
+
+
+        <label for="my-dropdown">Category</label>
+        <select id="my-dropdown" name="category">
+        <option value="SN">SN</option>
+        <option value="CN">CN</option>
+        <option value="Expert">Expert</option>
+        <option value="Regulator">Regulator</option>
+        </select>
+
+
+        <label for="dropdown">Department</label>
+        <select id="dropdown" name="department">
+        <option value="Operations">Operations</option>
+        <option value="Catering">Catering</option>
+        <option value="Infrastructure">Infrastructure</option>
+        <option value="Waste">Waste Management</option>
+        <option value="IT">IT</option>
+        <option value="Marine">Marine</option>
+        <option value="Lab">Lab</option>
+        <option value="Spy">Spy</option>
+        <option value="Security">Security</option>
+        </select>
+
+
+       
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
