@@ -30,7 +30,6 @@ app.get('/add-user', (request, response)=>{
 
 
 app.post('/add-user', async (request, response)=>{
-    // console.log(request.body)
     const {lastname, firstname, shellID, category, gender, department} = request.body
     try{
         const client = await mc.connect(MONGODB)
@@ -38,7 +37,6 @@ app.post('/add-user', async (request, response)=>{
         await db.collection('users').insertOne({
             lastname: lastname, firstname: firstname, shellID: shellID, category: category, gender: gender, department: department, checkedIn: false
         })
-        console.log('inserted user successfully')
         client.close()
         response.redirect('/')
     } catch(err){
@@ -64,7 +62,6 @@ app.get('/all-rooms', async (request, response)=>{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         const rooms = await db.collection('rooms').find().toArray()
-        console.log(rooms)
         response.render('rooms', {rooms: rooms})
         client.close()
     }catch (err){
@@ -93,7 +90,6 @@ app.get('/rooms/:id', async (request, response)=>{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         const room = await db.collection('rooms').findOne({roomNumber: roomNumber})
-        console.log(room)
         response.end()
     } catch(err){
         throw err
@@ -110,14 +106,12 @@ app.get('/add-room', (request, response)=>{
 
 
 app.post('/add-room', async (request, response)=>{
-    console.log(request.body)
     try {
         const {roomNum, extension} = request.body
         let beds = Number.parseInt(request.body.beds)
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         await db.collection('rooms').insertOne({roomNumber: roomNum, extension: extension, beds: beds, availableBeds: beds, occupants: []})   
-        console.log('successful')
         client.close();
         response.redirect('/')
     } catch (err) {
@@ -142,7 +136,6 @@ app.get('/check-in', async (request, response)=>{
 
 
 app.post('/check-in', async (request, response)=>{
-    console.log(request.body)
     const {shellID, checkInDate, checkOutDate, roomNumber} = request.body
     try{
         const client = await mc.connect(MONGODB)
@@ -163,7 +156,6 @@ app.post('/check-in', async (request, response)=>{
                 $set: {checkedIn: true}
             }
         )
-        console.log("successful")
         client.close()
         response.redirect('/')
     } catch(err){
@@ -173,7 +165,6 @@ app.post('/check-in', async (request, response)=>{
 
 
 app.get('/check-out', async (request, response)=>{
-
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
@@ -187,7 +178,6 @@ app.get('/check-out', async (request, response)=>{
 
 
 app.post('/check-out', async (request, response)=>{
-    console.log(request.body)
     const {shellID} = request.body
     try{
         const client = await mc.connect(MONGODB)
