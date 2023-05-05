@@ -31,12 +31,12 @@ app.get('/add-user', (request, response)=>{
 
 app.post('/add-user', async (request, response)=>{
     // console.log(request.body)
-    const {name, shellID, category, gender, department} = request.body
+    const {lastname, firstname, shellID, category, gender, department} = request.body
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         await db.collection('users').insertOne({
-            name: name, shellID: shellID, category: category, gender: gender, department: department, checkedIn: false
+            lastname: lastname, firstname: firstname, shellID: shellID, category: category, gender: gender, department: department, checkedIn: false
         })
         console.log('inserted user successfully')
         client.close()
@@ -112,11 +112,11 @@ app.get('/add-room', (request, response)=>{
 app.post('/add-room', async (request, response)=>{
     console.log(request.body)
     try {
-        const {roomNum} = request.body
+        const {roomNum, extension} = request.body
         let beds = Number.parseInt(request.body.beds)
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        await db.collection('rooms').insertOne({roomNumber: roomNum, beds: beds, availableBeds: beds, occupants: []})   
+        await db.collection('rooms').insertOne({roomNumber: roomNum, extension: extension, beds: beds, availableBeds: beds, occupants: []})   
         console.log('successful')
         client.close();
         response.redirect('/')
@@ -132,7 +132,7 @@ app.get('/check-in', async (request, response)=>{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         const availableRooms = await db.collection('rooms').find({availableBeds: { $gt: 0}}).toArray()
-        const employees = await db.collection('users').find({checkedIn: false}).toArray()
+        const employees = await db.collection('users').find({checkedIn: false}).sort({lastname: 1, firstname: 1}).toArray()
         response.render('checkin.pug', {employees: employees, rooms: availableRooms})
         client.close()
     } catch(err){

@@ -11,6 +11,6 @@ html
                 label(for="employee") Select employee: 
                 select(id="employee", class="form-control", name="shellID")
                     each employee in employees
-                        option(value=employee.shellID) #{employee.name}
+                        option(value=employee.shellID) #{employee.lastname} #{employee.firstname}
 
             button(type="submit" class="btn btn-primary btn-sm") Submit

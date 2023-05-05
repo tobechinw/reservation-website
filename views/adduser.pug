@@ -6,12 +6,17 @@ html
     div(class="container")
         form(action="/add-user", method="post")
             div(class="form-group")
-                label(for="name") Name of Employee:
-                input(type="text", class="form-control", id="name", name="name", required, placeholder="Type name here")
-            
+                label(for="lastname") Last Name:
+                input(type="text", class="form-control", id="lastname", name="lastname", required, placeholder="Doe")
+
+            div(class="form-group")
+                label(for="firstname") First Name:
+                input(type="text", class="form-control", id="firstname", name="firstname", required, placeholder="John")
+
+
             div(class="form-group")
                 label(for="shellID") Shell ID:
-                input(type="text", class="form-control", id="shellID", name="shellID", required, placeholder="Type ID here")
+                input(type="text", class="form-control", id="shellID", name="shellID", required, placeholder="69170")
 
             div(class="form-group")
                 label(for="category") Category:

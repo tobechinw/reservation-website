@@ -9,13 +9,13 @@ html
                 label(for="employee") Select employee: 
                 select(id="employee", class="form-control", name="shellID")
                     each employee in employees
-                        option(value=employee.shellID) #{employee.name}
+                        option(value=employee.shellID) #{employee.lastname} #{employee.firstname}
             
             div(class="form-group")
                 label(for="availableRoom") Select room: 
                 select(id="room", class="form-control" name="roomNumber")
                     each room in rooms
-                        option(value=room.roomNumber) Room #{room.roomNumber} - #{room.beds} bed, #{room.availableBeds} bed available
+                        option(value=room.roomNumber) Room #{room.roomNumber} - #{room.beds} bedroom, #{room.availableBeds} available
 
             div(class="form-group")
                 label(for="checkInDate") Check In Date:
