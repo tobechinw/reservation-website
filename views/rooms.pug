@@ -1,0 +1,31 @@
+html 
+    include index.pug
+
+        title Rooms 
+        link(rel="stylesheet" href="../css/bootstrap.css")
+        style.
+            .my-style{
+                font-size: 80px;
+            }
+
+    body 
+        div(class="container mx-auto")
+            .row
+                each room in rooms
+                    .col-md-6
+                        .card(style="max-width: 250px;")
+                            .card-header Crd Headr  
+                            .card-body
+                                h5(class="card-title") #{room.roomNumber} 
+                                p(class="card-text") #{room.beds} bedroom 
+                                p(class="card-text") Beds available: #{room.availableBeds}
+
+        script(type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js")
+        script(nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js")
+
+
+
+
+        
+
+

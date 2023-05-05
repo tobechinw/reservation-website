@@ -11,15 +11,51 @@ const { MONGODB } = require('./config.js')
 
 app.use(express.static('public'));
 app.set("view engine", "ejs")
+app.set("view engine", "pug")
 app.use('/views', express.static("views"))
+app.use('/css', express.static("css"))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
 app.get('/', (request, response)=>{
-    response.render("index")
-    response.end()
+    response.render("index.pug")
+})
+
+
+app.get('/add-user', (request, response)=>{
+    response.render('adduser.pug')
+})
+
+
+app.post('/add-user', async (request, response)=>{
+    // console.log(request.body)
+    const {name, shellID, category, gender, department} = request.body
+    try{
+        const client = await mc.connect(MONGODB)
+        let db = client.db('reservation')
+        await db.collection('users').insertOne({
+            name: name, shellID: shellID, category: category, gender: gender, department: department, checkedIn: false
+        })
+        console.log('inserted user successfully')
+        client.close()
+        response.redirect('/')
+    } catch(err){
+        throw err
+    }
+})
+
+app.get('/all-users', async (request, response)=>{
+    try{
+        const client = await mc.connect(MONGODB)
+        let db = client.db('reservation')
+        const employees = await db.collection('users').find().toArray()
+        response.render('users.pug', {employees: employees})
+        client.close()
+    } catch(err){
+        throw err
+    }
 })
 
 
@@ -28,11 +64,9 @@ app.get('/all-rooms', async (request, response)=>{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
         const rooms = await db.collection('rooms').find().toArray()
-
         console.log(rooms)
-        response.end()
+        response.render('rooms', {rooms: rooms})
         client.close()
-
     }catch (err){
         throw err
     }
@@ -43,41 +77,13 @@ app.get('/available-rooms', async (request, response)=>{
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const rooms = await db.collection('rooms').find({isOccupied: false}).toArray()
-        console.log(rooms)
-        response.end()
+        const rooms = await db.collection('rooms').find({availableBeds: { $gt: 0}}).toArray()
+        response.render('availableRooms', {rooms: rooms})
         client.close()
-
     }catch (err){
         throw err
     }
 })
-
-
-app.get('/add-room', (request, response)=>{
-    response.render('addroom')
-    response.end()
-})
-
-app.post('/add-room', async (request, response)=>{
-    console.log(request.body)
-    let name = request.body.name
-    let message = request.body.message
-    try {
-        const client = await mc.connect(MONGODB)
-        console.log('successful connection')
-        let db = client.db('reservation')
-        const rooms = await db.collection('rooms').find().toArray()
-        let roomNumber = rooms.length + 1
-        await db.collection('rooms').insertOne({name: name, message: message, roomNumber: roomNumber, isOccupied: false, occupant: '', category: '', department: ''})
-        console.log('successful')
-        client.close();
-        response.redirect('/')
-    } catch (err) {
-        throw err
-    }
-})
-
 
 
 app.get('/rooms/:id', async (request, response)=>{
@@ -95,45 +101,110 @@ app.get('/rooms/:id', async (request, response)=>{
 })
 
 
-app.get('/check-in', (request, response)=>{
-    response.render('checkin')
+
+
+app.get('/add-room', (request, response)=>{
+    response.render('addroom.pug')
 })
 
 
-app.post('/check-in', async (request, response)=>{
+
+app.post('/add-room', async (request, response)=>{
     console.log(request.body)
-    let name = request.body.name
-    let category = request.body.category
-    let department = request.body.category
-    try{
+    try {
+        const {roomNum} = request.body
+        let beds = Number.parseInt(request.body.beds)
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const rooms = await db.collection('rooms').find({isOccupied: false}).toArray()
-        if(rooms.length > 0){
-            await db.collection("rooms").updateOne({isOccupied: false}, {$set: {isOccupied: true, occupant: name, category: category, department: department}})
-            response.redirect('/')
-        }else{
-            //cannot check in because there aren't enough rooms
-            response.redirect('/')
-        }
-    } catch (err){
+        await db.collection('rooms').insertOne({roomNumber: roomNum, beds: beds, availableBeds: beds, occupants: []})   
+        console.log('successful')
+        client.close();
+        response.redirect('/')
+    } catch (err) {
         throw err
     }
 })
 
 
-app.get('/check-out', (request, response)=>{
-    response.render('checkout')
+
+app.get('/check-in', async (request, response)=>{
+    try{
+        const client = await mc.connect(MONGODB)
+        let db = client.db('reservation')
+        const availableRooms = await db.collection('rooms').find({availableBeds: { $gt: 0}}).toArray()
+        const employees = await db.collection('users').find({checkedIn: false}).toArray()
+        response.render('checkin.pug', {employees: employees, rooms: availableRooms})
+        client.close()
+    } catch(err){
+        throw err
+    }
+})
+
+
+app.post('/check-in', async (request, response)=>{
+    console.log(request.body)
+    const {shellID, checkInDate, checkOutDate, roomNumber} = request.body
+    try{
+        const client = await mc.connect(MONGODB)
+        let db = client.db('reservation')
+        const newOccupant = {
+            shellID: shellID, checkInDate: checkInDate, checkOutDate: checkOutDate
+        }
+        await db.collection('rooms').updateOne(
+            { roomNumber: roomNumber }, 
+            { 
+                $push: {occupants: newOccupant },
+                $inc: {availableBeds: -1}
+            }
+        )
+        await db.collection('users').updateOne(
+            {shellID: shellID},
+            {
+                $set: {checkedIn: true}
+            }
+        )
+        console.log("successful")
+        client.close()
+        response.redirect('/')
+    } catch(err){
+        throw err
+    }
+})
+
+
+app.get('/check-out', async (request, response)=>{
+
+    try{
+        const client = await mc.connect(MONGODB)
+        let db = client.db('reservation')
+        const employees = await db.collection('users').find({checkedIn: true}).toArray()
+        response.render('checkout.pug', {employees: employees})
+        client.close()
+    }catch(err){
+        throw err
+    }
 })
 
 
 app.post('/check-out', async (request, response)=>{
-    let occupant = request.body.name
-    console.log(occupant)
+    console.log(request.body)
+    const {shellID} = request.body
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        await db.collection('rooms').updateOne({occupant: occupant}, {$set: {occupant: '', isOccupied: false, category: '', department: ''}})
+        await db.collection('rooms').updateOne(
+            { occupants: { $elemMatch: { shellID: shellID } } },
+            {
+                $pull: { occupants: { shellID: shellID } }, 
+                $inc: { availableBeds: 1 }
+            },
+        );
+        await db.collection('users').updateOne(
+            {shellID: shellID},
+            {
+                $set: {checkedIn: false}
+            }
+        )
         response.redirect('/')
     } catch(err){
         throw err

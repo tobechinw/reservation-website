@@ -1,0 +1,45 @@
+html
+  include index.pug
+    title Add User
+    link(rel="stylesheet" href="../css/bootstrap.css")
+  body
+    div(class="container")
+        form(action="/add-user", method="post")
+            div(class="form-group")
+                label(for="name") Name of Employee:
+                input(type="text", class="form-control", id="name", name="name", required, placeholder="Type name here")
+            
+            div(class="form-group")
+                label(for="shellID") Shell ID:
+                input(type="text", class="form-control", id="shellID", name="shellID", required, placeholder="Type ID here")
+
+            div(class="form-group")
+                label(for="category") Category:
+                select(id="category", class="form-control", name="category")
+                    option(value="SN") SN
+                    option(value="CN") CN 
+                    option(value="Expert") Expert
+                    option(value="Regulator") Regulator 
+
+
+            div(class="form-group")
+                label(for="gender") Gender:
+                select(id="gender", class="form-control", name="gender")
+                    option(value="M") M
+                    option(value="F") F 
+
+            
+            div(class="form-group")
+                label(for="department") Department: 
+                select(id="department", class="form-control" name="department")
+                    option(value="Operations") Operations
+                    option(value="Catering") Catering
+                    option(value="Infrastructure") Infrastructure
+                    option(value="Waste") Waste
+                    option(value="IT") IT
+                    option(value="Marine") Marine
+                    option(value="Lab") Lab
+                    option(value="Spy") Spy
+                    option(value="Security") Security
+
+            button(type="submit" class="btn btn-primary btn-sm") Submit

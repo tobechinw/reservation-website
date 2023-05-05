@@ -1,0 +1,39 @@
+html
+  include index.pug
+    title Add Room
+    link(rel="stylesheet" href="../css/bootstrap.css")
+    style.
+      .my-style{
+        font-size: 30px;
+      }
+  body
+    div(class="container")
+    
+        form(action="/add-room", id='form1', method="post")
+            div(class="form-group")
+                label(for="roomNum") Room Number:
+                ion-icon(name="home-outline")
+                input(type="text", class="form-control" id="roomNum", name="roomNum", required)
+
+
+            div(class="form-group")
+                label(for="extension") Room Extension:
+                ion-icon(class="my-style" name="call-outline")
+                input(type="text", class="form-control" id="extension", name="extension", required)
+                div(class="invalid-feedback" display="block") Please provide a valid extension 
+
+
+            div(class="form-group")
+                label(for="dropdown") Number of beds:   
+                ion-icon(name="bed-outline")
+                select(class="form-control" id="dropdown" name="beds")
+                    option(value="1") 1
+                    option(value="2") 2
+                    
+
+
+
+            button(type="submit" class="btn btn-primary btn-sm") Submit
+
+    script(type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js")
+    script(nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js")
