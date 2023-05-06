@@ -61,7 +61,7 @@ app.get('/all-rooms', async (request, response)=>{
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const rooms = await db.collection('rooms').find().toArray()
+        const rooms = await db.collection('rooms').find().sort({roomNumber: 1}).toArray()
         response.render('rooms', {rooms: rooms})
         client.close()
     }catch (err){
@@ -74,7 +74,7 @@ app.get('/available-rooms', async (request, response)=>{
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const rooms = await db.collection('rooms').find({availableBeds: { $gt: 0}}).toArray()
+        const rooms = await db.collection('rooms').find({availableBeds: { $gt: 0}}).sort({roomNumber: 1}).toArray()
         response.render('availableRooms', {rooms: rooms})
         client.close()
     }catch (err){
