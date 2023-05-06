@@ -202,6 +202,42 @@ app.post('/check-out', async (request, response)=>{
 })
 
 
+app.get('/remove-employee', async(request, response)=>{
+    try{
+        const client = await mc.connect(MONGODB)
+        let db = client.db('reservation')
+        const employees = await db.collection('users').find().sort({lastname: 1, firstname: 1}).toArray()
+        response.render('removeEmployee.pug', {employees: employees})
+        client.close()
+    } catch(err){
+        throw err
+    }
+})
+
+app.post('/remove-employee', async(request, response)=>{
+    try{
+        const {shellID} = request.body
+        const client = await mc.connect(MONGODB)
+        let db = client.db('reservation')
+        const user = await db.collection('users').findOne({shellID: shellID})
+        if(user.checkedIn){
+            await db.collection('rooms').updateOne(
+                { occupants: { $elemMatch: { shellID: shellID } } },
+                {
+                    $pull: { occupants: { shellID: shellID } }, 
+                    $inc: { availableBeds: 1 }
+                },
+            );
+        }
+        await db.collection('users').deleteOne({shellID: shellID})
+        client.close()
+        response.redirect('/')
+    } catch(err){
+        throw err
+    }
+})
+
+
 app.listen(3000, ()=>{
     console.log("listening on port 3000")
 })
