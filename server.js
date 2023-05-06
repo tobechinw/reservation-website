@@ -9,7 +9,7 @@ const mc = require('mongodb').MongoClient
 // const { MONGODB } = require('./config.js')
 
 
-const {MONGODB} = process.env.MONGODB
+const MONGODB = process.env.MONGODB
 
 
 app.use(express.static('public'));
