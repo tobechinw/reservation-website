@@ -6,7 +6,10 @@ const bodyParser = require('body-parser')
 
 const mc = require('mongodb').MongoClient
 
-const { MONGODB } = require('./config.js')
+// const { MONGODB } = require('./config.js')
+
+
+const {MONGODB} = process.env.MONGODB
 
 
 app.use(express.static('public'));
@@ -238,6 +241,6 @@ app.post('/remove-employee', async(request, response)=>{
 })
 
 
-app.listen(3000, ()=>{
+app.listen(process.env.PORT || 3000, ()=>{
     console.log("listening on port 3000")
 })
