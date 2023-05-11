@@ -9,7 +9,8 @@ const path = require('path');
 app.use(express.static('public'));
 app.set("view engine", "ejs")
 app.set("view engine", "pug")
-app.use('/views', express.static("/src/views"));
+
+app.use('/views', express.static("./src/views"));
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
