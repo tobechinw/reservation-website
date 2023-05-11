@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js"
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,10 +25,10 @@
     "nodemon": "^2.0.22"
   },
   "imports": {
-    "#base/*": "./src/base/*.js",
-    "#employees/*": "./src/employees/*.js",
-    "#db/*": "./src/db/*.js",
-    "#rooms/*": "./src/rooms/*.js",
-    "#reserve/*": "./src/reserve/*.js"
+    "#base/*": "./base/*.js",
+    "#employees/*": "./employees/*.js",
+    "#db/*": "./db/*.js",
+    "#rooms/*": "./rooms/*.js",
+    "#reserve/*": "./reserve/*.js"
   }
 }
