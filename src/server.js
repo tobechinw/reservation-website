@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 app.use(express.static('public'));
 app.set("view engine", "ejs")
 app.set("view engine", "pug")
-app.use('/views', express.static("views"))
+app.use('/src/views', express.static("views"))
 app.use('/css', express.static("css"))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
