@@ -25,10 +25,10 @@
     "nodemon": "^2.0.22"
   },
   "imports": {
-    "#base/*": "./base/*.js",
-    "#employees/*": "./employees/*.js",
-    "#db/*": "./db/*.js",
-    "#rooms/*": "./rooms/*.js",
-    "#reserve/*": "./reserve/*.js"
+    "#base/*": "./src/base/*.js",
+    "#employees/*": "./src/employees/*.js",
+    "#db/*": "./src/db/*.js",
+    "#rooms/*": "./src/rooms/*.js",
+    "#reserve/*": "./src/reserve/*.js"
   }
 }
