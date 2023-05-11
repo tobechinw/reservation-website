@@ -1,12 +1,6 @@
-
 const jwt = require('jsonwebtoken')
 
-
 const mongo = require("#db/mongodb")
-
-// const mongo = require('../db/mongodb')
-
-
 
 module.exports = {
     addRoom,

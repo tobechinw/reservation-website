@@ -1,10 +1,5 @@
 const jwt = require('jsonwebtoken')
 
-
-const mc = require('mongodb').MongoClient
-
-const {MONGODB} = require('../config')
-
 const mongo = require('../db/mongodb')
 
 
