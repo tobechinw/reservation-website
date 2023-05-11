@@ -1,0 +1,65 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0 shrink-to-fit=no')
+  title Home Page
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ' crossorigin='anonymous')
+  div.container.my-5
+    body
+      br
+      br
+      br
+      div(class="container")
+        div(class="jumbotron")
+          h1(class="display-4") Welcome! 🙋🏽‍♂️
+          p(class="lead") Choose an option below to get started.
+        div(class="row")
+          div(class="col-md-4")
+            div(class="card")
+              div(class="card-body")
+                h5(class="card-title") Rooms
+                p(class="card-text") View room information.
+                .dropdown
+                  button.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+                    | Rooms
+                  ul.dropdown-menu
+                    li
+                      a.dropdown-item(href='/rooms/all-rooms') View all rooms
+                    li
+                      a.dropdown-item(href='/rooms/available-rooms') View available rooms
+                    li
+                      a.dropdown-item(href='/rooms/add-room') Add a room
+                    li
+                      a.dropdown-item(href='/rooms/delete-room') Delete a room
+          div(class="col-md-4")
+            div(class="card")
+              div(class="card-body")
+                h5(class="card-title") Employees
+                p(class="card-text") View all employees.
+                .dropdown
+                  button.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+                    | Employees
+                  ul.dropdown-menu
+                    li
+                      a.dropdown-item(href='/employees/all-employees') View all employees
+                    li
+                      a.dropdown-item(href='/employees/add-employee') Add employee
+                    li
+                      a.dropdown-item(href='/employees/remove-employee') Remove employee
+
+          div(class="col-md-4")
+            div(class="card")
+              div(class="card-body")
+                h5(class="card-title") Reservations
+                p(class="card-text") Make or modify reservations.
+                .dropdown
+                  button.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+                    | Reservations
+                  ul.dropdown-menu
+                    li
+                      a.dropdown-item(href='/reservations/check-in') Check in a user
+                    li
+                      a.dropdown-item(href='/reservations/check-out') Check out a user
+      script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js' integrity='sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe' crossorigin='anonymous')
+

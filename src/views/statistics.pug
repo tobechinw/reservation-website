@@ -1,0 +1,24 @@
+// my-pug-file.pug
+
+doctype html
+html
+  head
+    title My Chart
+    script(src='https://cdn.jsdelivr.net/npm/chart.js')
+    each stat in data  
+        each label in #{stat.labels} 
+            p #{label} 
+  body
+    canvas#myChart(width='400', height='400')
+    script.
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: JSON.stringify(finalData.labels),
+        //-   datasets: [{
+        //-     label: data.datasets[0].label,
+        //-     data: data.datasets[0].data
+        //-   }]
+        }
+      });
