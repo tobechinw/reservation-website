@@ -9,13 +9,10 @@ const path = require('path');
 app.use(express.static('public'));
 app.set("view engine", "ejs")
 app.set("view engine", "pug")
-
 app.set('views', path.join(__dirname, 'views'));
-console.log(path.join(__dirname, 'views'))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
 app.use('/', require('./routes/index.js'))
 
 
