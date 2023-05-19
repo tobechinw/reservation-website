@@ -3,11 +3,10 @@ const router = express.Router()
 
 const verifyjwt = require('../helpers/verifyjwt')
 const cookieParser = require('cookie-parser')
-router.use(cookieParser())
-
 const session = require('express-session')
 const baseService = require('./baseService')
 const sessionConfig = require('../helpers/sessionConfig')
+router.use(cookieParser())
 router.use(session(sessionConfig))
 
 router.post('/login', authenticate)
@@ -34,15 +33,15 @@ router.get('/login', (request, response)=>{
     response.render('login.pug')
 })
 
+router.get('/version', (request, response) =>{
+    const version = getVersion()
+    response.json({version: version})
+})
+
 router.use(verifyjwt)
 
 router.get('/home', (request, response)=>{
     response.render('homepage.pug')
-})
-
-router.get('/version', (request, response) =>{
-    const version = getVersion()
-    response.json({version: version})
 })
 
 function getVersion(){

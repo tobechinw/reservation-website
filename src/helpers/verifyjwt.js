@@ -1,7 +1,12 @@
 const jwt = require('jsonwebtoken');
 const secretConfig = require('../secret.json')
+const {secret} = require('../secret.json')
 
 function verifyjwt(req, res, next) {
+  if(!req.session.user){
+    return res.redirect('/login')
+  }
+
   const token = req.session.user.token
 
   if (!token) {
@@ -9,7 +14,7 @@ function verifyjwt(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(token, secretConfig.secret);
+    const decoded = jwt.verify(token, secret);
     req.user = decoded;
     next();
   } catch (err) {

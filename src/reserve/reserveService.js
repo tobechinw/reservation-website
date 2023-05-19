@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken')
-
 const mongo = require('../db/mongodb')
 
 module.exports = {
@@ -8,7 +6,6 @@ module.exports = {
     checkInUser,
     checkOutUser
 }
-
 
 async function getCheckedInEmployees(){
     const employees = await mongo.getCheckedInEmployees()

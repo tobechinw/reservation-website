@@ -22,9 +22,8 @@ html
                     each room in rooms 
                         tbody 
                             tr 
-                            th(scope='row') #{room.roomNumber}
+                            th(scope='row') 
+                                a(class='text-danger' href='/rooms/edit/'+room.roomNumber) #{room.roomNumber}
                             td #{room.extension}
                             td #{room.beds}
                             td #{room.availableBeds}
-                            td 
-                                a(class='text-danger' href='/rooms/edit/'+room.roomNumber) Edit

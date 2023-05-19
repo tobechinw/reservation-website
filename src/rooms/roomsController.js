@@ -2,38 +2,44 @@ const express = require('express')
 const router = express.Router()
 
 const roomsService = require('./roomsService')
+const verifyjwt = require('../helpers/verifyjwt')
+const cookieParser = require('cookie-parser')
+const authorize = require('../helpers/authorize')
+const Role = require('../helpers/roles')
+router.use(cookieParser())
+router.use(verifyjwt)
 
-router.get('/add-room', (request, response) =>{
+router.get('/add-room', authorize(Role.Admin), (request, response) =>{
     response.render('addRoom.pug')
 })
 
-router.get('/room/:id', getRoomByID)
+router.get('/room/:id', authorize(), getRoomByID)
 
-router.get('/all-rooms', getAll)
+router.get('/all-rooms', authorize(), getAll)
 
-router.get('/available-rooms', getAvailableRooms)
+router.get('/available-rooms', authorize(), getAvailableRooms)
 
-router.get('/statistics', getStatistics)
+router.get('/statistics', authorize(), getStatistics)
 
-router.post('/add-room', addRoom)
+router.post('/add-room', authorize(Role.Admin), addRoom)
 
-router.get('/check-availability', (request, response)=>{
+router.get('/check-availability', authorize(), (request, response)=>{
     response.end()
 })
 
-router.get('/edit/:roomNum', (request, response)=>{
+router.get('/edit/:roomNum', authorize(Role.Admin), (request, response)=>{
     roomsService.getByNumber(request.params)
         .then(room => room ? response.render('editroom.pug', {room : room}) : response.status(400).json({message: `Could not get room`}))
         .catch(err => {throw err})
 })
 
-router.get('/delete-room', (request, response)=>{
+router.get('/delete-room', authorize(Role.Admin), (request, response)=>{
     roomsService.getAll()
         .then(rooms => rooms ? response.render('removeroom.pug', {rooms: rooms}) : response.status(400).json({message: 'Could not get rooms'}))
         .catch(err => next(err))
 })
 
-router.post('/edit/:roomNum', (request, response)=>{
+router.post('/edit/:roomNum', authorize(Role.Admin), (request, response)=>{
     roomsService.updateRoomInfo(request.params, request.body)
         .then(routeResp =>{
             if(routeResp == undefined)
@@ -42,7 +48,7 @@ router.post('/edit/:roomNum', (request, response)=>{
         }).catch(err =>{throw err})
 })
 
-router.post('/delete-room', (request, response) =>{
+router.post('/delete-room', authorize(Role.Admin), (request, response) =>{
     roomsService.deleteRoom(request.body)
         .then(routeResp =>{
             if(routeResp == undefined)

@@ -3,12 +3,14 @@ const router = express.Router()
 
 const reserveService = require('./reserveService')
 const roomsService = require('../rooms/roomsService')
+const verifyjwt = require('../helpers/verifyjwt')
+const cookieParser = require('cookie-parser')
+const authorize = require('../helpers/authorize')
+const Role = require('../helpers/roles')
+router.use(cookieParser())
+router.use(verifyjwt)
 
-router.get('/', (request, response)=>{
-    response.end()
-})
-
-router.get('/check-in', (request, response) =>{
+router.get('/check-in', authorize(Role.Admin), (request, response) =>{
     Promise.all([
         reserveService.getCheckedOutEmployees(),
         roomsService.getAvailableRooms()
@@ -27,15 +29,15 @@ router.get('/check-in', (request, response) =>{
 })
 
 
-router.get('/check-out', (request, response) =>{
+router.get('/check-out', authorize(Role.Admin), (request, response) =>{
     reserveService.getCheckedInEmployees()
         .then(employees => employees ? response.render('checkout.pug', {employees: employees}) : response.status(400).json({message: 'Could not get all users'}))
         .catch(err => next(err))
 })
 
-router.post('/check-in', checkInUser)
+router.post('/check-in', authorize(Role.Admin), checkInUser)
 
-router.post('/check-out', checkOutUser)
+router.post('/check-out', authorize(Role.Admin), checkOutUser)
 
 
 function checkInUser(request, response, next){

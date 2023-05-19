@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken')
-
 const mongo = require("#db/mongodb")
 
 module.exports = {
@@ -17,7 +15,6 @@ async function getStatistics(){
     console.log(statistics)
     return statistics
 }
-
 
 async function addRoom({roomNum, extension, beds}){
     return await mongo.addRoom(roomNum, extension, beds)
