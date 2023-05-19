@@ -1,11 +1,12 @@
 const mc = require('mongodb').MongoClient
 
 
-// const { MONGODB } = require('../config')
+const { MONGODB } = require('../config')
 
-const MONGODB = process.env.MONGODB
+// const MONGODB = process.env.MONGODB
 
 module.exports = {
+    getUser,
     getAllEmployees,
     getAllRooms,
     getAvailableRooms,
@@ -21,6 +22,21 @@ module.exports = {
     checkOutUser,
     getCheckedInEmployees,
     getCheckedOutEmployees
+}
+
+
+/// --- LOGIN ROUTE --- ///
+
+async function getUser(username, password){
+    try{
+        const client = await mc.connect(MONGODB)
+        let db = client.db('reservation')
+        const user = await db.collection('users').findOne({username: username})
+        client.close()
+        return user
+    }catch (err){
+        throw err
+    }
 }
 
 
@@ -80,7 +96,7 @@ async function getStatistics(){
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const result = await db.collection('users').aggregate([
+        const result = await db.collection('employees').aggregate([
             {
               "$group" : {
                 _id: '$category',
@@ -130,7 +146,7 @@ async function getAllEmployees(){
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const employees = await db.collection('users').find().sort({lastname: 1, firstname: 1}).toArray()
+        const employees = await db.collection('employees').find().sort({lastname: 1, firstname: 1}).toArray()
         client.close()
         return employees
     } catch(err){
@@ -142,7 +158,7 @@ async function getEmployeeByID(shellID){
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const employee = await db.collection('users').findOne({shellID: shellID})
+        const employee = await db.collection('employees').findOne({shellID: shellID})
         client.close()
         return employee
     } catch(err){
@@ -154,7 +170,7 @@ async function addEmployee(lastname, firstname, shellID, category, gender, depar
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        await db.collection('users').insertOne({
+        await db.collection('employees').insertOne({
             lastname: lastname, firstname: firstname, shellID: shellID, 
             category: category, gender: gender, department: department, 
             checkedIn: false
@@ -180,7 +196,7 @@ async function removeEmployee(shellID){
                 },
             );
         }
-        await db.collection('users').deleteOne({shellID: shellID})
+        await db.collection('employees').deleteOne({shellID: shellID})
         client.close()
         return
     } catch(err){
@@ -205,7 +221,7 @@ async function checkInUser(shellID, checkInDate, checkOutDate, roomNumber){
                 $inc: {availableBeds: -1}
             }
         )
-        await db.collection('users').updateOne(
+        await db.collection('employees').updateOne(
             {shellID: shellID},
             {
                 $set: {checkedIn: true}
@@ -229,7 +245,7 @@ async function checkOutUser(shellID){
                 $inc: { availableBeds: 1 }
             },
         );
-        await db.collection('users').updateOne(
+        await db.collection('employees').updateOne(
             {shellID: shellID},
             {
                 $set: {checkedIn: false}
@@ -244,7 +260,7 @@ async function getCheckedInEmployees(){
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const employees = await db.collection('users').find({checkedIn: true}).sort({lastname: 1, firstname: 1}).toArray()
+        const employees = await db.collection('employees').find({checkedIn: true}).sort({lastname: 1, firstname: 1}).toArray()
         client.close()
         return employees
     } catch(err){
@@ -256,7 +272,7 @@ async function getCheckedOutEmployees(){
     try{
         const client = await mc.connect(MONGODB)
         let db = client.db('reservation')
-        const employees = await db.collection('users').find({checkedIn: false}).sort({lastname: 1, firstname: 1}).toArray()
+        const employees = await db.collection('employees').find({checkedIn: false}).sort({lastname: 1, firstname: 1}).toArray()
         client.close()
         return employees
     } catch(err){

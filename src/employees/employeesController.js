@@ -24,6 +24,8 @@ router.post('/remove-employee', removeEmployee)
 
 
 function getAll(request, response, next){
+    console.log('about to log cookies token')
+    console.log(request.cookies.token)
     employeesService.getAll()
         .then(employees => employees ? response.render('allEmployees.pug', {employees: employees}) : response.status(400).json({message: 'Could not get all users'}))
         .catch(err => next(err))
