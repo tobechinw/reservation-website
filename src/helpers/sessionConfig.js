@@ -1,4 +1,5 @@
-const {secret} = require('../secret.json')
+// const { secret } = require('../secret.json')
+const { secret } = process.env
 
 const sessionConfig = {
   secret: secret,

@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const verifyjwt = require('../helpers/verifyjwt')
+const verifyjwt = require('#helpers/verifyjwt')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const baseService = require('./baseService')
-const sessionConfig = require('../helpers/sessionConfig')
+const sessionConfig = require('#helpers/sessionConfig')
 router.use(cookieParser())
 router.use(session(sessionConfig))
 

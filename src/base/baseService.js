@@ -1,6 +1,7 @@
-const mongo = require('../db/mongodb')
+const mongo = require('#db/mongodb')
 const bcrypt = require('bcrypt')
-const secretConfig = require('../secret.json')
+// const { secret, expiryHrs } = require('../secret.json')
+const { secret, expiryHrs } = process.env
 const jwt = require("jsonwebtoken");
 
 module.exports = {
@@ -9,16 +10,15 @@ module.exports = {
 
 async function authenticate({username, password}){
     const user = await mongo.getUser(username)
-    console.log(`username is ${user.username} and role is ${user.role}`)
     if(user){
         const match = await bcrypt.compare(password, user.password);
         if(match) {
             var token;
-			if (secretConfig.expiryHrs == 0)
-				token = jwt.sign({ sub: user.username, role: user.role }, secretConfig.secret);
+			if (expiryHrs == 0)
+				token = jwt.sign({ sub: user.username, role: user.role }, secret);
 			else {
-				token = jwt.sign({ sub: user.username, role: user.role }, secretConfig.secret, {
-					expiresIn: secretConfig.expiryHrs.toString() + "h"
+				token = jwt.sign({ sub: user.username, role: user.role }, secret, {
+					expiresIn: expiryHrs.toString() + "h"
 				});
 			}
             console.log(`token is ${token}`)

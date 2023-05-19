@@ -2,10 +2,10 @@ const express = require('express')
 const router = express.Router()
 
 const employeesService = require('./employeesService')
-const verifyjwt = require('../helpers/verifyjwt')
+const verifyjwt = require('#helpers/verifyjwt')
 const cookieParser = require('cookie-parser')
-const authorize = require('../helpers/authorize')
-const Role = require('../helpers/roles')
+const authorize = require('#helpers/authorize')
+const Role = require('#helpers/roles')
 router.use(cookieParser())
 router.use(verifyjwt)
 

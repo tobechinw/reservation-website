@@ -1,8 +1,8 @@
 const mc = require('mongodb').MongoClient
 
-const { MONGODB } = require('../config')
+// const { MONGODB } = require('../config')
 
-// const MONGODB = process.env.MONGODB
+const MONGODB = process.env.MONGODB
 
 module.exports = {
     getUser,

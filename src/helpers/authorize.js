@@ -1,3 +1,5 @@
+module.exports = authorize;
+
 function authorize(roles = []){
 	if (typeof roles === "string"){
 		roles = [roles]
@@ -26,5 +28,3 @@ function authorize(roles = []){
 		}
 	}
 }
-
-module.exports = authorize;

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const secretConfig = require('../secret.json')
-const {secret} = require('../secret.json')
+const { secret } = process.env
+// const { secret } = require('../secret.json')
 
 function verifyjwt(req, res, next) {
   if(!req.session.user){

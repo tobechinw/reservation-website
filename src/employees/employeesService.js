@@ -1,4 +1,4 @@
-const mongo = require('../db/mongodb')
+const mongo = require('#db/mongodb')
 
 module.exports = {
     getAll,
