@@ -18,7 +18,7 @@ function verifyjwt(req, res, next) {
     req.user = decoded;
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Token not valid' });
+    res.render('login.pug', {error: 'Session expired. Please log in again'})
   }
 }
 
